@@ -38,23 +38,28 @@ app.post('/api/verify', (req, res) => {
   });
 });
 
+// ✅ Route d'enregistrement avec école et filière
 app.post('/api/register', (req, res) => {
-  const { uid, nom, prenom } = req.body;
-  if (!uid || !nom || !prenom) {
+  const { uid, nom, prenom, ecole, filiere } = req.body;
+  if (!uid || !nom || !prenom || !ecole || !filiere) {
     return res.status(400).json({ error: "Champs manquants" });
   }
 
-  db.query("INSERT INTO utilisateurs (uid, nom, prenom) VALUES (?, ?, ?)", [uid.trim(), nom, prenom], err => {
-    if (err) {
-      if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(409).json({ error: "Cet UID est déjà enregistré." });
+  db.query(
+    "INSERT INTO utilisateurs (uid, nom, prenom, ecole, filiere) VALUES (?, ?, ?, ?, ?)",
+    [uid.trim(), nom, prenom, ecole, filiere],
+    err => {
+      if (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+          return res.status(409).json({ error: "Cet UID est déjà enregistré." });
+        }
+        return res.status(500).json({ error: err.message });
       }
-      return res.status(500).json({ error: err.message });
-    }
 
-    lastBadge = {};
-    res.sendStatus(201);
-  });
+      lastBadge = {};
+      res.sendStatus(201);
+    }
+  );
 });
 
 app.delete('/api/delete/:uid', (req, res) => {
@@ -94,6 +99,7 @@ app.get('/api/logs/esp', (req, res) => {
   res.json(logsESP);
 });
 
+// ✅ Enregistrement du dernier badge vu (avec tout le profil si connu)
 app.post('/api/last', (req, res) => {
   const uid = req.body.uid?.trim();
   console.log(`📥 Reçu de l'ESP pour /last:`, uid);
@@ -111,7 +117,7 @@ app.post('/api/last', (req, res) => {
 
     if (results.length > 0) {
       console.log("✅ UID reconnu (déjà dans la base)");
-      lastBadge = results[0];
+      lastBadge = results[0]; // contient uid, nom, prenom, ecole, filiere, etc.
     } else {
       console.log("🆕 UID nouveau, non enregistré");
       lastBadge = { uid };
@@ -129,5 +135,5 @@ app.get('/api/last', (req, res) => {
 // Lancement serveur
 const port = 3000;
 app.listen(port, '0.0.0.0', () => {
-  console.log(`✅ Serveur démarré sur http://10.55.83.120:${port}`);
+  console.log(`✅ Serveur démarré sur http://192.168.1.151:${port}`);
 });
