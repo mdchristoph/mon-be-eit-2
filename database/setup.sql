@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS rfid_access;
+USE rfid_access;
+CREATE TABLE utilisateurs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  uid VARCHAR(20) NOT NULL UNIQUE,
+  nom VARCHAR(50),
+  prenom VARCHAR(50),
+  date_enregistrement TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

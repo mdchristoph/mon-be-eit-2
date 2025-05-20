@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contrôle d'accès RFID</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/rfid.css"> <!-- Chemin relatif depuis /public -->
+
+</head>
+
+<body>
+
+  <div class="navbar">
+    <h4><i class="fas fa-microchip"></i> RFID</h4>
+    <div class="navbar-icons">
+      <a href="#"><i class="fas fa-bell"></i></a>
+      <a href="#"><i class="fas fa-envelope"></i></a>
+      <a href="#"><i class="fas fa-user"></i></a>
+    </div>
+  </div>
+
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+  <div class="sidebar" id="sidebar">
+    <button onclick="showSection('welcome')"><i class="fas fa-home"></i><span> Accueil</span></button>
+    <button onclick="showSection('register')"><i class="fas fa-edit"></i><span> Enregistrement</span></button>
+    <button onclick="showSection('access')"><i class="fas fa-door-open"></i><span> Contrôle</span></button>
+    <button onclick="showSection('users')"><i class="fas fa-users"></i><span> Étudiants</span></button>
+  </div>
+
+  <div class="main" id="main">
+    <div class="main-content">
+      <div id="welcome" class="section fade-in">
+        <div class="welcome-page">
+          <h1>Bienvenue sur le Dashboard RFID Admin</h1>
+          <p>Gérez facilement les accès et les enregistrements des étudiants.</p>
+          <div class="mode-content">
+            <h4>Mode actuel : <span id="modeAffichage">Chargement...</span></h4>
+            <button class="btn btn-warning mt-2" onclick="toggleMode()">Changer de mode</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="register" class="section" style="display:none">
+        <h4>📝 Enregistrement d'un étudiant</h4>
+        <div class="card p-3 mb-3">
+          <div><strong>UID détecté :</strong> <span id="uid_new">...</span></div>
+          <form onsubmit="enregistrer(event)">
+            <input type="text" class="form-control my-2" id="nom" placeholder="Nom" required>
+            <input type="text" class="form-control my-2" id="prenom" placeholder="Prénom" required>
+            <button class="btn btn-success">Enregistrer</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="access" class="section" style="display:none">
+        <h4>🛂 Contrôle d'accès</h4>
+        <div class="card p-3">
+          <div><strong>UID :</strong> <span id="uid_check">...</span></div>
+          <div><strong>Nom :</strong> <span id="nom_check">-</span></div>
+          <div><strong>Prénom :</strong> <span id="prenom_check">-</span></div>
+          <div class="mt-2" id="acces_resultat"></div>
+        </div>
+      </div>
+
+      <div id="users" class="section" style="display:none">
+        <h4>📋 Étudiants enregistrés</h4>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>UID</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="liste_table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/rfid.js"></script> <!-- Chemin relatif depuis /public -->
+
+</body>
+
+</html>
