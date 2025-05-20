@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contrôle d'accès RFID</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="/rfid.css"> <!-- Chemin relatif depuis /public -->
-
+  <link rel="stylesheet" href="/rfid.css">
 </head>
 
 <body>
@@ -33,6 +31,7 @@
 
   <div class="main" id="main">
     <div class="main-content">
+
       <div id="welcome" class="section fade-in">
         <div class="welcome-page">
           <h1>Bienvenue sur le Dashboard RFID Admin</h1>
@@ -45,34 +44,40 @@
       </div>
 
       <div id="register" class="section" style="display:none">
-        <h4>📝 Enregistrement d'un étudiant</h4>
+        <h1>📝 Enregistrement d'un étudiant</h1>
         <div class="card p-3 mb-3">
           <div><strong>UID détecté :</strong> <span id="uid_new">...</span></div>
           <form onsubmit="enregistrer(event)">
             <input type="text" class="form-control my-2" id="nom" placeholder="Nom" required>
             <input type="text" class="form-control my-2" id="prenom" placeholder="Prénom" required>
+            <input type="text" class="form-control my-2" id="ecole" placeholder="École" required>
+            <input type="text" class="form-control my-2" id="filiere" placeholder="Filière" required>
             <button class="btn btn-success">Enregistrer</button>
           </form>
         </div>
       </div>
 
       <div id="access" class="section" style="display:none">
-        <h4>🛂 Contrôle d'accès</h4>
+        <h1>🛂 Contrôle d'accès</h1>
         <div class="card p-3">
           <div><strong>UID :</strong> <span id="uid_check">...</span></div>
           <div><strong>Nom :</strong> <span id="nom_check">-</span></div>
           <div><strong>Prénom :</strong> <span id="prenom_check">-</span></div>
+          <div><strong>École :</strong> <span id="ecole_check">-</span></div>
+          <div><strong>Filière :</strong> <span id="filiere_check">-</span></div>
           <div class="mt-2" id="acces_resultat"></div>
         </div>
       </div>
 
       <div id="users" class="section" style="display:none">
-        <h4>📋 Étudiants enregistrés</h4>
+        <h1>📋 Étudiants enregistrés</h1>
         <table class="table table-striped">
           <thead>
             <tr>
               <th>Nom</th>
               <th>Prénom</th>
+              <th>École</th>
+              <th>Filière</th>
               <th>UID</th>
               <th>Date</th>
               <th>Action</th>
@@ -81,11 +86,11 @@
           <tbody id="liste_table"></tbody>
         </table>
       </div>
+
     </div>
   </div>
 
-  <script src="/rfid.js"></script> <!-- Chemin relatif depuis /public -->
+  <script src="/rfid.js"></script>
 
 </body>
-
 </html>
