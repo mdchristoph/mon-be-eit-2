@@ -81,30 +81,56 @@ async function enregistrer(e) {
 
   blockUIDUpdate = true;
 
-  const res = await fetch('/api/register', {
+  // Vérifie si l'utilisateur existe déjà
+  const resCheck = await fetch('/api/verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ uid, nom, prenom, ecole, filiere })
+    body: JSON.stringify({ uid })
   });
 
-  if (res.status === 201) {
-    alert("✅ Étudiant enregistré !");
-    document.getElementById("nom").value = "";
-    document.getElementById("prenom").value = "";
-    document.getElementById("ecole").value = "";
-    document.getElementById("filiere").value = "";
-    document.getElementById("uid_new").textContent = "...";
-    updateListe();
-  } else if (res.status === 409) {
-    alert("⚠️ Cet UID est déjà enregistré !");
+  if (resCheck.status === 200) {
+    // Étudiant déjà existant → mise à jour
+    const resUpdate = await fetch('/api/update/' + encodeURIComponent(uid), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nom, prenom, ecole, filiere })
+    });
+
+    if (resUpdate.status === 200) {
+      alert("✅ Étudiant mis à jour !");
+    } else {
+      alert("❌ Échec de la mise à jour.");
+    }
   } else {
-    alert("❌ Erreur lors de l'enregistrement.");
+    // Nouvel étudiant → insertion
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid, nom, prenom, ecole, filiere })
+    });
+
+    if (res.status === 201) {
+      alert("✅ Étudiant enregistré !");
+    } else if (res.status === 409) {
+      alert("⚠️ Cet UID est déjà enregistré !");
+    } else {
+      alert("❌ Erreur lors de l'enregistrement.");
+    }
   }
+
+  // Nettoyage du formulaire
+  document.getElementById("nom").value = "";
+  document.getElementById("prenom").value = "";
+  document.getElementById("ecole").value = "";
+  document.getElementById("filiere").value = "";
+  document.getElementById("uid_new").textContent = "...";
+  updateListe();
 
   setTimeout(() => {
     blockUIDUpdate = false;
   }, 3000);
 }
+
 
 async function checkDernierBadge() {
   const [modeRes, badgeRes] = await Promise.all([

@@ -69,6 +69,25 @@ app.delete('/api/delete/:uid', (req, res) => {
     res.sendStatus(200);
   });
 });
+// ✅ Mettre à jour un étudiant existant
+app.put('/api/update/:uid', (req, res) => {
+  const uid = req.params.uid.trim();
+  const { nom, prenom, ecole, filiere } = req.body;
+
+  if (!nom || !prenom || !ecole || !filiere) {
+    return res.status(400).json({ error: "Champs manquants" });
+  }
+
+  db.query(
+    "UPDATE utilisateurs SET nom = ?, prenom = ?, ecole = ?, filiere = ? WHERE uid = ?",
+    [nom, prenom, ecole, filiere, uid],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(200).json({ message: "Étudiant mis à jour avec succès." });
+    }
+  );
+});
+
 
 app.get('/api/logs', (req, res) => {
   db.query("SELECT * FROM utilisateurs ORDER BY date_enregistrement DESC LIMIT 10", (err, results) => {
